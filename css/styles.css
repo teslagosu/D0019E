@@ -1,0 +1,170 @@
+/*
+set minimum height on the menu to 825px
+ */
+
+#menu{
+    min-height: 825px;
+}
+
+/*
+change margin top and bottom hon h4 headers
+ */
+#menu h4{
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+
+/*
+change margin top on p in menus
+ */
+#menu p{
+    margin-top: 15px;
+}
+
+/*
+lower the header for blogposts
+ */
+#blogpost-header{
+    margin-top:100px;
+}
+
+/*
+top5 blog posts border settings
+ */
+.top5-border{
+   padding: 10px;
+
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+/*
+change bootstrap settings on the profile image in  5 latest blogs menu
+ */
+#top5img{
+    border-radius: 50% !important;
+    width: 40px;
+    height: 40px;
+    margin-left: 0px;
+    margin-top: 10px;
+    background-size: cover;
+    display: inline-block;
+
+}
+
+/*
+Change the title
+ */
+#top5-title{
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
+    text-decoration: none;
+    display:inline;
+    margin-left: 30px;
+
+}
+
+/*
+change settings of the user in the menu so that its better looking
+ */
+
+#menu-user{
+    float:left;
+    padding-right: 30px;
+
+}
+
+/*
+change margin left of the date in menu.php
+ */
+#menu-date{
+    margin-left:40px;
+}
+
+.public-user-name{
+    margin-top: 0%;
+}
+
+#content{
+    margin-top:5%;
+}
+
+
+.results{
+    padding-bottom: 1.75rem;
+    margin-bottom: 3.75rem;
+    border-bottom: 1px solid #aab8c2;
+}
+
+.nav-item.avatar{
+    margin-right: 20px;
+}
+.title{
+    font-family: Helvetica Neue LT,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 2.25rem;
+    letter-spacing: -.025rem;
+    margin-top:5%;
+    margin-left: 28%;
+    padding: 0;
+    word-break: break-word;
+    display:block;
+    color:#657786;
+    transition: color .3s ease-in-out;
+    text-decoration: none;
+}
+
+.title:hover{
+    text-decoration: none;
+    color:black;
+}
+
+/*Title in content */
+
+.navbar-brand{
+    margin-left: 40px;
+
+}
+
+.col-8 h3{
+    text-align: center;
+}
+
+.col-8 p{
+    text-align: center;
+}
+
+#date{
+    font-style: italic;
+}
+
+#edit-button{
+    margin-left: 700px;
+}
+
+/*
+make small profile pic round
+ */
+#small-avatar{
+    border-radius: 50% !important;
+    width:30px;
+    height:30px;
+    display:inline-block;
+    margin-left:1%;
+    margin-bottom:2%
+}
+/*
+make profile image smaller and round
+ */
+#profileImage{
+    border-radius: 50% !important;
+    width: 200px;
+    height: 200px;
+
+    background-size: cover;
+    margin-bottom: 2rem;
+
+}
