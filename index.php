@@ -1,9 +1,10 @@
 <?php
 //start session
 session_start();
+include_once "constants.php";
 ?>
 <!doctype html>
-
+<html lang="sv">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -12,7 +13,7 @@ session_start();
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!--own CSS-->
-    <link rel="stylesheet" href="<?base?>css/styles.css">
+    <link rel="stylesheet" href="<?php root?>css/styles.css">
     <title>H4CK3RBL0GG3N 1.0</title>
 </head>
 <body>

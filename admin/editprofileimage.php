@@ -12,14 +12,21 @@ if(empty($_SESSION['username'])){
     die("redirecting to login.php");
 }
 //set variables
+$message ="";
 $userid = getUserId($_SESSION['username']);
 console_log($userid);
-$profile_text_area = $_POST['update-profile-textarea'];
+
+if(isset($_POST['update-profile-textarea'])){
+    $profile_text_area = $_POST['update-profile-textarea'];
+}
+
+
 $userName = $_SESSION['username'];
-$tmp_file = $_FILES['update-user-image']['tmp_name'];
+
 //if update profile button is pushed
 if(isset($_POST['update-profile'])){
     //set variables
+    $tmp_file = $_FILES['update-user-image']['tmp_name'];
     $filename = $_FILES['update-user-image'];
     $imageName = $filename['name'];
 //if a file is uploaded, set upload status and image status to 1, aslo the name of img
@@ -28,11 +35,10 @@ if(isset($_POST['update-profile'])){
         $imageName = $_FILES['update-user-image']['name'];
         $upload_status = 1;
         $image_status = 1;
-        console_log("inne i is_uploaded_file");
-        console_log($imageName);
+
         //check if the uploaded file exists on the server
         if (file_exists("../uploads/" . $imageName)) {
-            console_log("inne i file_exists");
+
             //if it exists send error message.
             $message = renameImageFileMsg();
             $upload_status = 0;
@@ -47,24 +53,28 @@ if(isset($_POST['update-profile'])){
     }
     //if upload status is ok, update the users information
     if ($upload_status == 1) {
-        console_log("upload status = 1");
+
         updateUserProfileInformation($userid,$profile_text_area);
-        $message = successUploadedPostMsg();
+        $message = changeProfileInformationSuccessfulMsg();
         //if image status is okey update the profile picture and move it to uploads folder
         if ($image_status == 1) {
-            console_log("imagestatus = 1");
-            updateUserProfileImage($userName,$imageName);
+
             move_uploaded_file($tmp_file,"../uploads/".$imageName);
+            updateUserProfileImage($userName,$imageName);
 
 
-            //
+
+
         }
+
     }
+
 
 }
 ?>
 <!doctype html>
 
+<html lang="sv">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -84,8 +94,8 @@ if(isset($_POST['update-profile'])){
     include_once "../menu.php";
     ?>
     <div class="col-8">
-        <?php echo($message); ?>
-        <h2> Ändra profilbild </h2>
+        <?=($message) ?>
+        <h2> Ändra inställningar </h2>
         <form method="post" enctype="multipart/form-data">
             <!--username-->
 
@@ -104,9 +114,6 @@ if(isset($_POST['update-profile'])){
             <div class="form-group">
                 <button type="submit" class="btn btn-dark" name="update-profile" >Uppdatera profil</button>
             </div>
-
-
-
         </form>
     </div>
 
@@ -124,6 +131,6 @@ if(isset($_POST['update-profile'])){
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>
-<div id="content" class="col-8" align="center">
+
 
 

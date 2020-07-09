@@ -4,11 +4,12 @@ include_once (__DIR__."/model/message.php");
 include_once (__DIR__."/controller/db_controller.php");
 include_once "constants.php";
 //check if login button is clicked
+$message = "";
 if(isset($_POST['log_in_user'])){
     //variables
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $message = "";
+
     // check if username and password fields are empty
     if(empty($username) && empty($password)){
         $message = usernameAndPasswordMissingMsg();
@@ -25,13 +26,15 @@ if(isset($_POST['log_in_user'])){
     //If both fields are filled in, continue with Log in.
     else{
         //check if username and password match the inputs
-        if(checkIfUserExist($username) == true &&  checkHashedPassword($username,$password) == true){
+
+        if(checkIfUserExist($username) == true &&  checkHashedPassword($username,$password) == 1){
             //start session and redirect user to mainpage
+
             session_start();
             $_SESSION['username'] = htmlentities(getUsername($username));
             $_SESSION['id'] = htmlentities(getUserId($username));
             //redirect user to mainpage.php
-          header("Location:../lab4/admin/mainpage.php");
+         header("Location:../lab4/admin/mainpage.php");
         }else{
             //if username, password and hashed password dont match. Show error message.
             $message = wrongUsernameOrPasswordMsg();
@@ -44,7 +47,7 @@ if(isset($_POST['log_in_user'])){
 ?>
 
 <!doctype html>
-
+<html lang="sv">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -64,19 +67,19 @@ if(isset($_POST['log_in_user'])){
     include_once "menu.php";
     ?>
     <div class="col-8">
-        <?php echo($message); ?>
+        <?=$message ?>
     <h2> Logga in </h2>
 
     <form method="post">
         <!--username-->
         <div class="form-group">
-            <label">Användarnamn</label>
-            <input type="username" class="form-control" aria-describedby="usernameHelp" name="username" placeholder="Användarnamn">
+            <label>Användarnamn</label>
+            <input class="form-control" name="username" placeholder="Användarnamn">
 
         </div>
         <!--password-->
         <div class="form-group">
-            <label">Lösenord</label>
+            <label>Lösenord</label>
             <input type="password" class="form-control"  name="password" placeholder="Lösenord">
 
         </div>
@@ -87,6 +90,7 @@ if(isset($_POST['log_in_user'])){
     </div>
     <!--footer-->
     <?php
+
 //shows footer and info.php
     include_once "info.php";
     include_once "footer.php";

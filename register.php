@@ -94,7 +94,7 @@ if(isset($_POST['reg-register'])) {
 ?>
 
 <!doctype html>
-
+<html lang="sv">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -115,7 +115,10 @@ if(isset($_POST['reg-register'])) {
     //
     ?>
     <div class="col-8">
-        <?php echo($message); ?>
+        <?php
+        if(isset($_POST['reg-register'])) {
+            echo($message);
+        }?>
         <h2> Registrera en användare </h2>
         <form method="post" enctype="multipart/form-data">
             <!--username-->

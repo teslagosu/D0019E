@@ -1,6 +1,9 @@
 <?php
 //start session
-session_start();
+if(!isset($_SESSION))
+{
+    session_start();
+}
 //check if session is started, else redirect to login page
 if(empty($_SESSION['username'])){
     header("Location: ../login.php");
@@ -17,31 +20,33 @@ if(isset($_POST['user-image-edit'])){
     header("Location: editprofileimage.php");
 }
 
+
 ?>
 
 <!--Start of userpage-->
-<div id="content" class="col-8" align="center">
+<div id="content" class="col-8">
 
-    <h2>Min sida</h2>
+    <h2 id="user-page-header">Min sida</h2>
     <img src="<?=base?>uploads/<?=getProfileImage($username)?>" id="profileImage" class="figure-img rounded" alt="Profile Image"/>
     </a>
-    <h2><?php echo $_SESSION['username']?></h2>
+    <h2 id="user-name-display"><?php echo $_SESSION['username']?></h2>
 
 
 
     <form method="post" enctype="multipart/form-data">
         <!--button-->
-        <div class="form-group">
+        <div class="form-group-user-button">
             <button type="submit" class="btn btn-dark" name="user-image-edit" >Ändra inställningar</button>
+
         </div>
 
 
 
     </form>
-    <p></p>
+    <h3>Information om bloggen</h3>
     <?php
     //prints out the information about the user
-    echo(getProfileInfo($username));
+    echo("<p>".getProfileInfo($username)."</p>");
 
     ?>
 

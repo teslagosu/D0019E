@@ -25,7 +25,7 @@ $image = getImageByPostId($postid);
 ?>
 
 <!doctype html>
-
+<html lang="sv">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">

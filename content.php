@@ -9,6 +9,7 @@
 
 <h2 style="text-align: center">Alla inlägg</h2>
 
+
         <?php
         //shows all blog posts in content
         $data = getLatestBlogPost();

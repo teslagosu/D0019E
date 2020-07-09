@@ -1,13 +1,13 @@
 <?php
 
     // Hämtar inloggningsuppgifterna
-   require_once('db_credentials.php');
+    require_once('db_credentials.php');
 
     /** Kopplar upp oss mot databasen */
     function db_connect()
     {
         // Kopplar upp mot databasen
-        $connection = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
+        $connection = mysqli_connect("utbweb.its.ltu.se:3308", "sebhyr7", "uMx9bpgb", "D0019E_V20_sebhyr7");
 
         // Kollar om något gick fel, i så fall skrivs orsaken ut och skriptet avslutas
         if(mysqli_connect_errno())

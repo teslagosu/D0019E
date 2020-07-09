@@ -35,11 +35,11 @@ function openConnection(){
 //get the latest blog post
 function getLatestBlogPost(){
     $link = openConnection();
-    $query = "SELECT p.post_id, p.post_user_id, p.post_title, u.user_name FROM  user AS u JOIN Post AS p ON (u.user_id = p.post_user_id) ORDER BY post_id DESC";
+    $query = "SELECT p.post_id, p.post_user_id, p.post_title, u.user_name FROM User AS u JOIN Post AS p ON (u.user_id = p.post_user_id) ORDER BY post_id DESC";
 
-    if($stmt = mysqli_prepare($link, $query)) {
+    $stmt = mysqli_prepare($link, $query);
         mysqli_stmt_execute($stmt);
-    }
+
     $result = $stmt->get_result();
     //print out the blog posts
     while ($row = mysqli_fetch_assoc($result)) {
@@ -48,7 +48,7 @@ function getLatestBlogPost(){
 
 
         //spara
-        echo("<p id='written-by'>Skrivet av: <a href='".base."admin/publicuser.php?user=".$row['post_user_id']."'>".$row['user_name']."</a></p>");
+        echo("<p class='written-by'>Skrivet av: <a href='".base."admin/publicuser.php?user=".$row['post_user_id']."'>".$row['user_name']."</a></p>");
         echo " </div>";
     }
     // Close statement
@@ -94,12 +94,12 @@ function getFiveLatestBlogs(){
     //open connection to db
     $link = openConnection();
     //prepared statement
-    $query = "SELECT u.user_name,u.user_image,p.post_id,p.post_user_id, p.post_title, post_date FROM user AS u JOIN Post AS p ON (u.user_id = p.post_user_id) ORDER BY post_id DESC LIMIT 5 ";
+    $query = "SELECT u.user_name,u.user_image,p.post_id,p.post_user_id, p.post_title, post_date FROM User AS u JOIN Post AS p ON (u.user_id = p.post_user_id) ORDER BY post_id DESC LIMIT 5 ";
     //if everything went okey with the query set it to statement
-    if($stmt = mysqli_prepare($link, $query)) {
+
+   $stmt = mysqli_prepare($link, $query);
         //execute the statement
         mysqli_stmt_execute($stmt);
-    }
     // get the result
     $result = $stmt->get_result();
     //loop through the results and put it into an array
@@ -115,17 +115,46 @@ function getFiveLatestBlogs(){
 //return the array with data
     return $rows;
 }
+
+function getActiveUsers(){
+     //create an array
+    $rows = array();
+    //open connection to db
+    $link = openConnection();
+    //prepared statement
+    $query = "SELECT DISTINCT u.user_name, u.user_id, u.user_image FROM User AS u JOIN Post AS p ON (u.user_id = p.post_user_id) GROUP BY p.post_id DESC" ;
+    //if everything went okey with the query set it to statement
+
+   $stmt = mysqli_prepare($link, $query);
+        //execute the statement
+        mysqli_stmt_execute($stmt);
+    // get the result
+    $result = $stmt->get_result();
+    //loop through the results and put it into an array
+   while($row = mysqli_fetch_assoc($result)){
+       $rows[] = $row;
+   }
+
+    // Close statement
+    mysqli_stmt_close($stmt);
+// Close connection
+    mysqli_close($link);
+
+//return the array with data
+    return $rows;
+}
+
 // gets the data of all the users posts to the public
 function getPublicUsersPost($user_id){
     //an array
     $rows = array();
     $link = openConnection();
-    $query = "SELECT p.post_id,p.post_user_id, p.post_title, post_date FROM user AS u JOIN Post AS p ON (u.user_id = p.post_user_id) WHERE p.post_user_id = ? ORDER BY post_id DESC";
+    $query = "SELECT p.post_id,p.post_user_id, p.post_title, post_date FROM User AS u JOIN Post AS p ON (u.user_id = p.post_user_id) WHERE p.post_user_id = ? ORDER BY post_id DESC";
 
-    if($stmt = mysqli_prepare($link, $query)) {
+    $stmt = mysqli_prepare($link, $query);
         mysqli_stmt_bind_param($stmt, 'i', $user_id);
         mysqli_stmt_execute($stmt);
-    }
+
     //store the results in an array
     $result = $stmt->get_result();
     while($row = mysqli_fetch_assoc($result)){
@@ -145,7 +174,7 @@ function getAllBlogPostsByTitle(){
     openConnection();
     $query ="SELECT post_title from Post ORDER BY post_date DESC ";
     $result = openConnection()->query($query);
-    if (!$result) die(mysql_fatal_error());
+    //if (!$result) die(mysql_fatal_error());
     $rows = $result->num_rows;
 
     for ($j = 0 ; $j < $rows ; ++$j)
@@ -162,7 +191,7 @@ function getNewestUser(){
     openConnection();
     $query ="SELECT user_name from User ORDER BY user_id DESC LIMIT 1 ";
     $result = openConnection()->query($query);
-    if (!$result) die(mysql_fatal_error());
+    //if (!$result) die(mysql_fatal_error());
     $rows = $result->num_rows;
 
     for ($j = 0 ; $j < $rows ; ++$j)
@@ -194,15 +223,24 @@ function checkIfUserExist($username){
 //gets the username form the db
 function getUsername($username){
     $dbName ="";
-    openConnection();
-    $query = "SELECT user_name FROM user WHERE user_name='$username'";
-    $result = openConnection()->query($query);
-    if (!$result) die(mysql_fatal_error());
+    $link = openConnection();
+    $query = "SELECT user_name FROM User WHERE user_name=?";
+    $stmt = mysqli_prepare($link, $query);
 
-    $row = $result->fetch_array(MYSQLI_ASSOC);
-    $result->close();
-    openConnection()->close();
-    return htmlspecialchars($row[user_name]);
+    mysqli_stmt_bind_param($stmt, 's', $username);
+
+    mysqli_stmt_execute($stmt);
+
+    //get the result and fetch array
+    $result = $stmt->get_result();
+    $user = $result->fetch_array(MYSQLI_ASSOC);
+    // Close statement
+    mysqli_stmt_close($stmt);
+
+// Close connection
+    mysqli_close($link);
+//returns the id
+    return htmlspecialchars($user[user_name]);
 }
 //checks if the user exists already
 function checkifUserExist($username){
@@ -211,7 +249,7 @@ function checkifUserExist($username){
     //prepared statement query
     $query = "SELECT user_name FROM User WHERE user_name = ?";
 
-    if($stmt = mysqli_prepare($link, $query)) {
+    $stmt = mysqli_prepare($link, $query);
         //bind the username to the ? and execute
         mysqli_stmt_bind_param($stmt, 's', $username);
         mysqli_stmt_execute($stmt);
@@ -221,7 +259,7 @@ function checkifUserExist($username){
         //how many rows did come up from the result
         $rows =$result->num_rows;
 
-    }
+
     // Close statement
     mysqli_stmt_close($stmt);
 
@@ -243,12 +281,12 @@ function getUserId($username){
     //select all from user where the username is ?
     $query = "SELECT * FROM User WHERE user_name = ?";
     // if ok, execute statement
-    if($stmt = mysqli_prepare($link, $query)) {
+    $stmt = mysqli_prepare($link, $query);
 
         mysqli_stmt_bind_param($stmt, 's', $username);
 
         mysqli_stmt_execute($stmt);
-    }
+
     //get the result and fetch array
     $result = $stmt->get_result();
     $user = $result->fetch_array(MYSQLI_ASSOC);
@@ -258,7 +296,7 @@ function getUserId($username){
 // Close connection
     mysqli_close($link);
 //returns the id
-return htmlspecialchars($user[user_id]);
+return htmlspecialchars($user['user_id']);
 
 }
 //get post id from userid
@@ -286,15 +324,18 @@ function getPostIdForUser($userid){
 
 }
 
+//check if post belongs to user
+
+
 function getPostTitlesFromUserId($userid){
 
     $link = openConnection();
-    $query = "SELECT p.post_id, p.post_user_id, p.post_title, post_content, post_date FROM user AS u JOIN Post AS p ON (u.user_id = p.post_user_id) WHERE post_user_id = ? ORDER BY post_id DESC";
+    $query = "SELECT p.post_id, p.post_user_id, p.post_title, post_content, post_date FROM User AS u JOIN Post AS p ON (u.user_id = p.post_user_id) WHERE post_user_id = ? ORDER BY post_id DESC";
 
-    if($stmt = mysqli_prepare($link, $query)) {
+    $stmt = mysqli_prepare($link, $query);
         mysqli_stmt_bind_param($stmt, 's', $userid);
         mysqli_stmt_execute($stmt);
-    }
+
     $result = $stmt->get_result();
     while ($row = mysqli_fetch_assoc($result))
     {
@@ -317,15 +358,15 @@ function getPostTitlesFromUserId($userid){
 function getPostByID($postid){
 
     $link = openConnection();
-    $query = "SELECT * FROM user AS u JOIN Post AS p ON (u.user_id = p.post_user_id) WHERE post_id = ?";
+    $query = "SELECT * FROM User AS u JOIN Post AS p ON (u.user_id = p.post_user_id) WHERE post_id = ?";
 
-    if($stmt = mysqli_prepare($link, $query)) {
+    $stmt = mysqli_prepare($link, $query);
 
         mysqli_stmt_bind_param($stmt, 's', $postid);
 
 
         mysqli_stmt_execute($stmt);
-    }
+
     $result = $stmt->get_result();
     $row = mysqli_fetch_assoc($result);
     // Close statement
@@ -337,6 +378,32 @@ function getPostByID($postid){
     return $row;
 
 }
+
+function getUsernameFromPostID($postid){
+
+    $link = openConnection();
+    $query = "SELECT * FROM User AS u JOIN Post AS p ON (u.user_id = p.post_user_id) WHERE post_id = ?";
+
+    $stmt = mysqli_prepare($link, $query);
+
+    mysqli_stmt_bind_param($stmt, 's', $postid);
+
+
+    mysqli_stmt_execute($stmt);
+
+    $result = $stmt->get_result();
+    $row = mysqli_fetch_assoc($result);
+    // Close statement
+    mysqli_stmt_close($stmt);
+
+// Close connection
+    mysqli_close($link);
+//return post content
+    return $row['user_name'];
+
+}
+
+
 //get the title of the post by id
 function getPostTitleByID($postid){
 
@@ -416,15 +483,15 @@ function getImageByPostId($postid){
 //get username, presentation and image from user by id
 function getUserByID($userId){
     $link = openConnection();
-    $query = "SELECT user_name, user_presentation, user_image FROM user WHERE user_id = ?";
+    $query = "SELECT user_name, user_presentation, user_image FROM User WHERE user_id = ?";
 
-    if($stmt = mysqli_prepare($link, $query)) {
+    $stmt = mysqli_prepare($link, $query);
 
         mysqli_stmt_bind_param($stmt, 's', $userId);
 
 
         mysqli_stmt_execute($stmt);
-    }
+
     $result = $stmt->get_result();
     $row = mysqli_fetch_assoc($result);
     // Close statement
@@ -470,46 +537,77 @@ if($stmt = mysqli_prepare($link, $query)) {
 }
 // checks the hashed password from the user when loggin in
 function checkHashedPassword($username,$password){
-    openConnection();
-    $query ="SELECT user_password from User WHERE user_name = '$username' ";
-    $result = openConnection()->query($query);
-    if (!$result) die(mysql_fatal_error());
-    $rows = $result->num_rows;
-        $row = $result->fetch_array(MYSQLI_ASSOC);
-    $result->close();
-    openConnection()->close();
-    if(password_verify($password,$row['user_password'])){
-        return true;
-    }else{
-       return false;
-    }
+    $link = openConnection();
+    $query ="SELECT user_password from User WHERE user_name = ? ";
+    $stmt = mysqli_prepare($link, $query);
+    //bind the username to the ? and execute
+    mysqli_stmt_bind_param($stmt, 's', $username);
+    mysqli_stmt_execute($stmt);
+    //bind the result from username
+    $stmt->bind_result($username);
+    $result = $stmt->get_result();
+    //how many rows did come up from the result
+    $user = $result->fetch_array(MYSQLI_ASSOC);
+
+    // Close statement
+    mysqli_stmt_close($stmt);
+
+// Close connection
+    mysqli_close($link);
+   //check if password matches the hashed one
+if(password_verify($password,$user['user_password'])){
+    return 1;
+}else{
+    return 0;
+}
 
 }
 //return profile image by username
 function getProfileImage($username){
-        openConnection();
-        $query = "SELECT user_image FROM user WHERE user_name='$username'";
-        $result = openConnection()->query($query);
-        if (!$result) die(mysql_fatal_error());
+    $rows = array();
+        $link = openConnection();
+        $query = "SELECT user_image FROM User WHERE user_name=?";
+    $stmt = mysqli_prepare($link, $query);
+    //bind the username to the ? and execute
+    mysqli_stmt_bind_param($stmt, 's', $username);
+    mysqli_stmt_execute($stmt);
+    //bind the result from username
+    $stmt->bind_result($image);
 
-        $row = $result->fetch_array(MYSQLI_ASSOC);
-        $result->close();
-        openConnection()->close();
-        return $row[user_image];
+    $result = $stmt->get_result();
+
+   $row = mysqli_fetch_assoc($result);
+
+
+
+    // Close statement
+    mysqli_stmt_close($stmt);
+
+// Close connection
+    mysqli_close($link);
+        return $row['user_image'];
 
 }
 //gets information about the user from username
 function getProfileInfo($username){
-    openConnection();
-    $query = "SELECT user_presentation FROM user WHERE user_name='$username'";
-    $result = openConnection()->query($query);
-    if (!$result) die(mysql_fatal_error());
+    $link = openConnection();
+    $query = "SELECT user_presentation FROM User WHERE user_name=?";
+    $stmt = mysqli_prepare($link, $query);
+    //bind the username to the ? and execute
+    mysqli_stmt_bind_param($stmt, 's', $username);
+    mysqli_stmt_execute($stmt);
+    //bind the result from username
+    $stmt->bind_result($username);
+    $result = $stmt->get_result();
 
-    $row = $result->fetch_array(MYSQLI_ASSOC);
-    $result->close();
-    openConnection()->close();
-    //returns the presentation
-    return $row[user_presentation];
+   $row = mysqli_fetch_assoc($result);
+
+    // Close statement
+    mysqli_stmt_close($stmt);
+
+// Close connection
+    mysqli_close($link);
+    return $row['user_presentation'];
 }
 
 //update the users profile picture
@@ -517,14 +615,14 @@ function updateUserProfileImage($username,$imageName){
     $link = openConnection();
     $query = "UPDATE User SET user_image=? WHERE user_name=?";
 
-    if($stmt = mysqli_prepare($link, $query)) {
+    $stmt = mysqli_prepare($link, $query);
         //bind the ? where the username is the same
         mysqli_stmt_bind_param($stmt, 'ss',  $user_image,$user_name);
         $user_image = $imageName;
         $user_name = $username;
 
         mysqli_stmt_execute($stmt);
-    }
+
     // Close statement
     mysqli_stmt_close($stmt);
 
@@ -539,8 +637,6 @@ function updateUserProfileInformation($userid,$user_presentation){
     if($stmt = mysqli_prepare($link, $query)) {
 
         mysqli_stmt_bind_param($stmt, 'ss',  $user_presentation,$userid);
-
-
 
         mysqli_stmt_execute($stmt);
     }
@@ -573,13 +669,13 @@ function updateImage($postid,$imagename){
     $link = openConnection();
     $query = "UPDATE Image SET image_name=? WHERE post_id=?";
 
-    if($stmt = mysqli_prepare($link, $query)) {
+    $stmt = mysqli_prepare($link, $query);
 
         mysqli_stmt_bind_param($stmt, 'si',  $imagename,$postid);
 
 
         mysqli_stmt_execute($stmt);
-    }
+
     // Close statement
     mysqli_stmt_close($stmt);
 
@@ -589,16 +685,16 @@ function updateImage($postid,$imagename){
 //check if an image exist in a post by post id
 function doesImageExistInPost($postid){
     $link = openConnection();
-    $query = "SELECT image_name FROM IMAGE WHERE post_id=?";
+    $query = "SELECT image_name FROM Image WHERE post_id=?";
 
-    if($stmt = mysqli_prepare($link, $query)) {
+    $stmt = mysqli_prepare($link, $query);
 
         mysqli_stmt_bind_param($stmt, 'i', $postid);
         mysqli_stmt_execute($stmt);
         $stmt->store_result();
         $result = $stmt->num_rows;
 
-    }
+
     // Close statement
     mysqli_stmt_close($stmt);
 
@@ -632,14 +728,14 @@ function insertImageToDatabase($postid,$imageName){
     $link = openConnection();
     $query = "INSERT INTO Image (post_id,image_name) VALUES(?,?)";
 
-    if($stmt = mysqli_prepare($link, $query)) {
+    $stmt = mysqli_prepare($link, $query);
 
         mysqli_stmt_bind_param($stmt, 'is', $post_id, $image_name);
         $post_id = $postid;
         $image_name = $imageName;
 
         mysqli_stmt_execute($stmt);
-    }
+
     // Close statement
     mysqli_stmt_close($stmt);
 

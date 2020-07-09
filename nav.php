@@ -1,5 +1,10 @@
 <?php
-session_start();
+
+if(!isset($_SESSION))
+{
+    session_start();
+}
+
 //includes
 include_once "constants.php";
 include_once "config.php";
@@ -21,7 +26,7 @@ if(!isset($_SESSION['username'])) {
 ?>
     <!--navigation-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light ">
-    <a class="navbar-brand" name="back-to-index" href="<?=base?>index.php">H4CK3RBL0GG3N</a>
+    <a class="navbar-brand" href="<?=base?>index.php">H4CK3RBL0GG3N</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -41,8 +46,6 @@ if(!isset($_SESSION['username'])) {
 }else{
     //get the username of the session username variable
     $username =$_SESSION['username'];
-
-
 //html for users in a session
 ?>
     <!--Navigation-->
@@ -72,11 +75,12 @@ if(!isset($_SESSION['username'])) {
         <ul class="navbar-nav ml-auto nav-flex-icons">
             <li class="nav-item avatar">
                 <a class="nav-link p-0" href="<?=base?>admin/mainpage.php">
-                    <img src="<?=base?>uploads/<?=getProfileImage($username);?>" class="rounded-circle z-depth-0"
-                         alt="avatar image" height="30">
+                    <img src="<?php echo base."uploads/".(getProfileImage($_SESSION['username']));?>" class="rounded-circle z-depth-0"
+                         alt="avatar image" height="30"/><?php echo $_SESSION['username']?>
                 </a>
             </li>
         </ul>
+
         <!--form for the button log out-->
         <form class="form-inline my-2 my-lg-0" method="post">
             <button class="btn btn-dark my-2 my-sm-0 mr-4" type="submit" name="log_out">Logga ut</button>

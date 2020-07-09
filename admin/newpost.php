@@ -10,6 +10,7 @@ if(empty($_SESSION['username'])){
 //set username and userid
 $username = $_SESSION['username'];
 $userid = $_SESSION['id'];
+$message = "";
 //includes
 include_once "../controller/db_controller.php";
 include_once "../model/message.php";
@@ -19,6 +20,7 @@ include_once "../constants.php";
 //if the post request button for uploading a post is pressed
 if(isset($_POST['load-blog-post'])){
     //set variables
+    $message = "";
     $title = $_POST['post-title'];
     $text = $_POST['post-text-area'];
     $imageName = "";
@@ -101,10 +103,11 @@ if(isset($_POST['load-blog-post'])){
     <?php
     include_once "../nav.php";
     include_once "../menu.php";
+
     ?>
     <!--start of content-->
     <div class="col-8">
-        <?php echo($message);
+        <?=$message;
 
         ?>
         <h2> Skriv inlägg </h2>

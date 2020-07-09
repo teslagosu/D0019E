@@ -16,6 +16,12 @@ function usernameNotEnteredMsg(){
             </div>";
 }
 
+function unauthorizedAuthorMsg(){
+    return "<div class=\"alert alert-danger\" role=\"alert\">
+                Du är inte ägare av detta inlägg!
+            </div>";
+}
+
 function passwordNotEnteredMsg(){
     return "<div class=\"alert alert-danger\" role=\"alert\">
                 Inget lösenord har angetts!
@@ -84,6 +90,12 @@ function uploadFailedMsg(){
 function changeProfileImageSuccessfulMsg(){
     return "<div class=\"alert alert-success\" role=\"alert\">
                 Byte av profilbild lyckades!
+            </div>";
+}
+
+function changeProfileInformationSuccessfulMsg(){
+    return "<div class=\"alert alert-success\" role=\"alert\">
+                Ändringarna har utförts!
             </div>";
 }
 

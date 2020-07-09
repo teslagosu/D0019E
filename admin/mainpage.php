@@ -2,7 +2,10 @@
 //start output buffering. Had some trouble when loading user images to the 5 latest blogposts and trying to edit a users profile
 ob_start();
 //start session
-session_start();
+if(!isset($_SESSION))
+{
+    session_start();
+}
 //includes
 include_once __DIR__."../../constants.php";
 //if no session is running redirect to login.php
@@ -13,7 +16,7 @@ if(empty($_SESSION['username'])){
 
 ?>
 <!doctype html>
-
+<html lang="sv">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">

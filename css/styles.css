@@ -1,48 +1,69 @@
-/*
-set minimum height on the menu to 825px
- */
 
 #menu{
     min-height: 825px;
 }
-
-/*
-change margin top and bottom hon h4 headers
- */
 #menu h4{
     margin-top: 20px;
     margin-bottom: 20px;
 
 }
-
-/*
-change margin top on p in menus
- */
 #menu p{
     margin-top: 15px;
 }
+.written-by{
+    margin-right: 420px;
 
-/*
-lower the header for blogposts
- */
+}
+
+#user-page-header{
+    text-align: center;
+    margin-top:0;
+}
+
+.rounded-circle.z-depth-0{
+    width: 40px;
+    height: 40px;
+
+}
+
 #blogpost-header{
     margin-top:100px;
 }
 
-/*
-top5 blog posts border settings
- */
+.form-group-user-button{
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
 .top5-border{
    padding: 10px;
-
+    //border-color: #aab8c2;
+    //border-style: solid;
     padding: 0;
     margin-bottom: 20px;
 }
 
-/*
-change bootstrap settings on the profile image in  5 latest blogs menu
- */
-#top5img{
+#username-next-to-avatar{
+    margin-right:10px;
+}
+
+.top5-border a{
+    color:white;
+    text-decoration: none;
+}
+
+.top5-border a:hover{
+    color: black;
+    text-decoration: none;
+    transition: color .3s ease-in-out;
+
+}
+
+#user-name-display{
+    text-align: center;
+}
+
+.top5img{
     border-radius: 50% !important;
     width: 40px;
     height: 40px;
@@ -52,11 +73,7 @@ change bootstrap settings on the profile image in  5 latest blogs menu
     display: inline-block;
 
 }
-
-/*
-Change the title
- */
-#top5-title{
+.top5-title{
     font-size: 20px;
     font-weight: bold;
     color: aliceblue;
@@ -66,20 +83,13 @@ Change the title
 
 }
 
-/*
-change settings of the user in the menu so that its better looking
- */
-
-#menu-user{
+.menu-user{
     float:left;
     padding-right: 30px;
+    color:red;
 
 }
-
-/*
-change margin left of the date in menu.php
- */
-#menu-date{
+.menu-date{
     margin-left:40px;
 }
 
@@ -100,6 +110,11 @@ change margin left of the date in menu.php
 
 .nav-item.avatar{
     margin-right: 20px;
+
+}
+
+.nav-item.avatar img{
+    margin-right:5px;
 }
 .title{
     font-family: Helvetica Neue LT,Helvetica Neue,Helvetica,Arial,sans-serif;
@@ -144,10 +159,6 @@ change margin left of the date in menu.php
 #edit-button{
     margin-left: 700px;
 }
-
-/*
-make small profile pic round
- */
 #small-avatar{
     border-radius: 50% !important;
     width:30px;
@@ -156,15 +167,16 @@ make small profile pic round
     margin-left:1%;
     margin-bottom:2%
 }
-/*
-make profile image smaller and round
- */
+
 #profileImage{
     border-radius: 50% !important;
     width: 200px;
     height: 200px;
-
+    margin-left:auto;
+    margin-right: auto;
     background-size: cover;
+    display:block;
     margin-bottom: 2rem;
+    margin-top: 40px;
 
 }
